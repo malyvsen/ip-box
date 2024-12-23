@@ -31,11 +31,7 @@ async def write_description(pull_requests: Sequence[PullRequest]) -> str:
 
 
 def format_pr(pr: PullRequest) -> str:
-    pieces = {
-        "number": pr.number,
-        "url": pr.url,
-        "title": pr.title,
-    }
+    pieces = {"url": pr.url, "title": pr.title}
     if pr.description is not None:
         pieces["description"] = pr.description
 
@@ -44,16 +40,20 @@ def format_pr(pr: PullRequest) -> str:
 
 
 INSTRUCTION = """
-<polecenie>
-Napisz zbiorczy opis prac wykonanych w następujących _pull requests_. Odpowiedz tylko opisem. Przy tworzeniu opisu odwołuj się do _pull requests_ według liczb i URL.
-</polecenie>
+<instruction>
+Napisz zbiorczy opis prac wykonanych w następujących _pull requests_, odwołując się do nich po URL.
+Nie wdawaj się w szczegóły techniczne ani nazwy kodowe. Wymieniaj kilka _pull requests_ w ramach jednego zdania/punktu, jeśli są powiązane. Szczególnie uwzględnij aspekt badawczo-rozwojowy.
+Pisz rzeczownikami ("wdrożenie" zamiast "wdrożono").
+Odpowiedz tylko opisem.
+</instruction>
 """.strip()
 
 EXAMPLE = """
-<przykład>
-Wdrożenie nowych widoków do beemployee.pl oraz rozbudowa funkcjonalności systemu (PR [#24](https://github.com/beemployee/webapp/pull/24)).
-Wyświetlanie zamówień i wydarzeń na Kokpicie w aplikacji iOS (PR [#29](https://github.com/beemployee/ios/pull/29), [#30](https://github.com/beemployee/ios/pull/30)).
-</przykład>
+<example-output>
+- Zwiększenie stabilności systemu wystosowującego zapytania do modeli językowych (https://github.com/beemployee/ml/pull/26).
+- Stworzenie systemu ewaluacji klasyfikatora CV (https://github.com/beemployee/ml/pull/22) celem oceny i poprawy jego dokładności (https://github.com/beemployee/ml/pull/28).
+- Wdrożenie automatycznego systemu sprawdzania kodu źródłowego (https://github.com/beemployee/ml/pull/27).
+</example-output>
 """.strip()
 
 
