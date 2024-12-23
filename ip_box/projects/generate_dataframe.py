@@ -21,7 +21,7 @@ async def generate_dataframe(
     )
     return pd.DataFrame(
         {
-            "Number KPWI": list(range(1, len(present_months) + 1)),
+            "Numer KPWI": list(range(1, len(present_months) + 1)),
             "Rok": [month.year for month in present_months],
             "Miesiąc": [month.polish_name.title() for month in present_months],
             "Data rozpoczęcia": [month.first_day for month in present_months],
