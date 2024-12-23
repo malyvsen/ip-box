@@ -35,6 +35,7 @@ async def main(repo: str, author: str, year: int):
     descriptions_by_month = {
         month: await write_project_description(prs)
         for month, prs in grouped_by_month.items()
+        if len(prs) > 0
     }
     print(
         "\n\n".join(
