@@ -64,7 +64,7 @@ async def generate(input: Path, output: Path, author: str, year: int):
         if pr.author == author
     ]
     dataframe = await generate_dataframe(fitting_prs)
-    dataframe.to_csv(output)
+    dataframe.to_csv(output, index=False)
 
     print(f"Write {len(dataframe)} rows to {output.as_posix()}")
 
