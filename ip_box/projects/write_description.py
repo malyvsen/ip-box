@@ -5,10 +5,10 @@ from cerebras.cloud.sdk import AsyncClient
 from cerebras.cloud.sdk.types.chat import ChatCompletion
 from cerebras.cloud.sdk.types.chat.chat_completion import ChatCompletionResponseChoice
 
-from .pull_request import PullRequest
+from ip_box.pull_request import PullRequest
 
 
-async def write_project_description(pull_requests: Sequence[PullRequest]) -> str:
+async def write_description(pull_requests: Sequence[PullRequest]) -> str:
     """Generate a consolidated description of the work done in the PRs."""
 
     completion = await client.chat.completions.create(

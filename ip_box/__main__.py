@@ -1,11 +1,12 @@
 from datetime import date
+from pathlib import Path
 
 import asyncclick as click
 
 from .git_username import git_username
 from .github_client import github_client
+from .projects import generate_dataframe
 from .pull_request import MergedPullRequest, PullRequest
-from .write_project_description import write_project_description
 
 
 @click.command()
@@ -21,7 +22,13 @@ from .write_project_description import write_project_description
     help="Only include PRs merged in this year",
     default=date.today().year,
 )
-async def main(repo: str, author: str, year: int):
+@click.option(
+    "--output",
+    type=click.Path(exists=False, dir_okay=False, path_type=Path),
+    help="Output file name",
+    default="ip_box.csv",
+)
+async def main(repo: str, author: str, year: int, output: Path):
     repo_object = github_client.get_repo(repo)
     all_prs = await PullRequest.from_repository(repo_object)
     fitting_prs = [
@@ -31,18 +38,10 @@ async def main(repo: str, author: str, year: int):
         if pr.merged_at.year == year
         if pr.author == author
     ]
-    grouped_by_month = MergedPullRequest.group_by_month(fitting_prs)
-    descriptions_by_month = {
-        month: await write_project_description(prs)
-        for month, prs in grouped_by_month.items()
-        if len(prs) > 0
-    }
-    print(
-        "\n\n".join(
-            f"{month}.{year}:\n{description}"
-            for month, description in descriptions_by_month.items()
-        )
-    )
+    dataframe = await generate_dataframe(fitting_prs)
+    dataframe.to_csv(output)
+
+    print(f"Write {len(dataframe)} rows to {output.as_posix()}")
 
 
 main()

@@ -7,6 +7,8 @@ from github.PullRequest import PullRequest as GithubPullRequest
 from github.Repository import Repository
 from tqdm import tqdm
 
+from .month import Month
+
 
 @dataclass(frozen=True)
 class PullRequest(ABC):
@@ -85,10 +87,15 @@ class MergedPullRequest(PullRequest):
     @staticmethod
     def group_by_month(
         prs: Sequence["MergedPullRequest"],
-    ) -> dict[int, list["MergedPullRequest"]]:
-        grouped: dict[int, list[MergedPullRequest]] = {
-            month: [] for month in range(1, 13)
-        }
+    ) -> dict[Month, list["MergedPullRequest"]]:
+        earliest = min(pr.merged_at for pr in prs)
+        latest = max(pr.merged_at for pr in prs)
+        months = Month.inclusive_range(
+            Month.from_date(earliest), Month.from_date(latest)
+        )
+
+        result = {month: [] for month in months}
         for pr in prs:
-            grouped[pr.merged_at.month].append(pr)
-        return grouped
+            result[Month.from_date(pr.merged_at)].append(pr)
+
+        return result
