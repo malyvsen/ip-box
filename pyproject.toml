@@ -1,0 +1,28 @@
+[project]
+name = "ip-box"
+version = "0.1.0"
+description = "CLI toolkit for generatng IP-box documentation from a GitHub repository"
+authors = [
+    {name = "malyvsen", email = "5940672+malyvsen@users.noreply.github.com"},
+]
+dependencies = []
+requires-python = "==3.11.*"
+readme = "README.md"
+license = {text = "GPLv3"}
+
+
+[tool.pdm]
+distribution = false
+
+[dependency-groups]
+dev = [
+    "ruff>=0.8.4",
+    "pyright>=1.1.391",
+    "deptry>=0.21.2",
+]
+
+[tool.pdm.scripts]
+lint = "ruff check ."
+typecheck = "pyright ."
+deptry = "deptry ."
+check = { composite = ["lint", "typecheck", "deptry"] }
