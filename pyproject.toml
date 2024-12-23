@@ -5,7 +5,7 @@ description = "CLI toolkit for generatng IP-box documentation from a GitHub repo
 authors = [
     {name = "malyvsen", email = "5940672+malyvsen@users.noreply.github.com"},
 ]
-dependencies = ["pygithub>=2.5.0", "asyncclick>=8.1.7.2", "tqdm>=4.67.1", "gitpython>=3.1.43", "cerebras-cloud-sdk>=1.15.0", "pandas>=2.2.3"]
+dependencies = ["pygithub>=2.5.0", "asyncclick>=8.1.7.2", "tqdm>=4.67.1", "gitpython>=3.1.43", "pandas>=2.2.3", "openai>=1.58.1"]
 requires-python = "==3.11.*"
 readme = "README.md"
 license = {text = "GPLv3"}

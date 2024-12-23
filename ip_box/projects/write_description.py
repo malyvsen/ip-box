@@ -1,9 +1,7 @@
 import os
 from typing import Sequence
 
-from cerebras.cloud.sdk import AsyncClient
-from cerebras.cloud.sdk.types.chat import ChatCompletion
-from cerebras.cloud.sdk.types.chat.chat_completion import ChatCompletionResponseChoice
+from openai import AsyncClient
 
 from ip_box.pull_request import PullRequest
 
@@ -12,7 +10,7 @@ async def write_description(pull_requests: Sequence[PullRequest]) -> str:
     """Generate a consolidated description of the work done in the PRs."""
 
     completion = await client.chat.completions.create(
-        model="llama-3.3-70b",
+        model="gpt-4o",
         messages=[
             {
                 "role": "user",
@@ -27,12 +25,7 @@ async def write_description(pull_requests: Sequence[PullRequest]) -> str:
         ],
         temperature=0.1,
     )
-    assert isinstance(completion, ChatCompletion)
-    assert isinstance(completion.choices, list)
-    assert len(completion.choices) == 1
-    choice = completion.choices[0]
-    assert isinstance(choice, ChatCompletionResponseChoice)
-    response = choice.message.content
+    response = completion.choices[0].message.content
     assert response is not None
     return response
 
@@ -64,8 +57,8 @@ Wyświetlanie zamówień i wydarzeń na Kokpicie w aplikacji iOS (PR [#29](https
 """.strip()
 
 
-_api_key = os.getenv("CEREBRAS_API_KEY")
+_api_key = os.getenv("OPENAI_API_KEY")
 if _api_key is None:
-    raise ValueError("CEREBRAS_API_KEY environment variable is not set")
+    raise ValueError("OPENAI_API_KEY environment variable is not set")
 
 client = AsyncClient(api_key=_api_key)
