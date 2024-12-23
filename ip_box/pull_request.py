@@ -10,45 +10,57 @@ from tqdm import tqdm
 @dataclass(frozen=True)
 class PullRequest(ABC):
     title: str
-    description: str | None
+    number: int
+    url: str
+    author: str
     created_at: datetime
+    description: str | None
 
     @staticmethod
-    async def by_author(
+    async def from_repository(
         repo: Repository,
-        author: str,
     ) -> list["OpenPullRequest | ClosedPullRequest | MergedPullRequest"]:
         prs = repo.get_pulls(state="all")
         return [
-            PullRequest.from_github(pr)
+            PullRequest.from_github_object(pr)
             for pr in tqdm(prs, desc="Listing PRs", total=prs.totalCount)
-            if pr.user.login == author
         ]
 
     @staticmethod
-    def from_github(
+    def from_github_object(
         pr: GithubPullRequest,
     ) -> "OpenPullRequest | ClosedPullRequest | MergedPullRequest":
+        description = pr.body if isinstance(pr.body, str) and len(pr.body) > 0 else None
+
         if pr.state == "open":
             return OpenPullRequest(
                 title=pr.title,
-                description=pr.body if pr.body else None,
+                number=pr.number,
+                url=pr.html_url,
+                author=pr.user.login,
                 created_at=pr.created_at,
+                description=description,
             )
 
         if pr.merged_at is not None:
             return MergedPullRequest(
                 title=pr.title,
-                description=pr.body if pr.body else None,
+                number=pr.number,
+                url=pr.html_url,
+                author=pr.user.login,
                 created_at=pr.created_at,
+                description=description,
                 merged_at=pr.merged_at,
             )
 
         if pr.closed_at is not None:
             return ClosedPullRequest(
                 title=pr.title,
-                description=pr.body if pr.body else None,
+                number=pr.number,
+                url=pr.html_url,
+                author=pr.user.login,
                 created_at=pr.created_at,
+                description=description,
                 closed_at=pr.closed_at,
             )
 
