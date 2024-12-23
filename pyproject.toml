@@ -5,7 +5,7 @@ description = "CLI toolkit for generatng IP-box documentation from a GitHub repo
 authors = [
     {name = "malyvsen", email = "5940672+malyvsen@users.noreply.github.com"},
 ]
-dependencies = []
+dependencies = ["pygithub>=2.5.0", "asyncclick>=8.1.7.2", "tqdm>=4.67.1"]
 requires-python = "==3.11.*"
 readme = "README.md"
 license = {text = "GPLv3"}
@@ -14,15 +14,17 @@ license = {text = "GPLv3"}
 [tool.pdm]
 distribution = false
 
+[tool.pdm.scripts]
+lint = "ruff check ."
+typecheck = "pyright ."
+deptry = "deptry ."
+check = { composite = ["lint", "typecheck", "deptry"] }
+
+dev = { cmd = "python -m ip_box", env_file = ".env" }
+
 [dependency-groups]
 dev = [
     "ruff>=0.8.4",
     "pyright>=1.1.391",
     "deptry>=0.21.2",
 ]
-
-[tool.pdm.scripts]
-lint = "ruff check ."
-typecheck = "pyright ."
-deptry = "deptry ."
-check = { composite = ["lint", "typecheck", "deptry"] }
