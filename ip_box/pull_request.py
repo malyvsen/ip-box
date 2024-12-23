@@ -1,6 +1,7 @@
 from abc import ABC
 from dataclasses import dataclass
 from datetime import datetime
+from typing import Sequence
 
 from github.PullRequest import PullRequest as GithubPullRequest
 from github.Repository import Repository
@@ -80,3 +81,14 @@ class ClosedPullRequest(PullRequest):
 @dataclass(frozen=True)
 class MergedPullRequest(PullRequest):
     merged_at: datetime
+
+    @staticmethod
+    def group_by_month(
+        prs: Sequence["MergedPullRequest"],
+    ) -> dict[int, list["MergedPullRequest"]]:
+        grouped: dict[int, list[MergedPullRequest]] = {
+            month: [] for month in range(1, 13)
+        }
+        for pr in prs:
+            grouped[pr.merged_at.month].append(pr)
+        return grouped
