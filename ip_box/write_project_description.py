@@ -58,8 +58,8 @@ Napisz zbiorczy opis prac wykonanych w następujących _pull requests_. Odpowied
 
 EXAMPLE = """
 <przykład>
-Wdrożenie nowych widoków do beemployee.pl oraz rozbudowa funkcjonalności systemu (PR (#24)[https://github.com/beemployee/webapp/pull/24]).
-Wyświetlanie zamówień i wydarzeń na Kokpicie w aplikacji iOS (PR (#29)[https://github.com/beemployee/ios/pull/29], (#30)[https://github.com/beemployee/ios/pull/30]).
+Wdrożenie nowych widoków do beemployee.pl oraz rozbudowa funkcjonalności systemu (PR [#24](https://github.com/beemployee/webapp/pull/24)).
+Wyświetlanie zamówień i wydarzeń na Kokpicie w aplikacji iOS (PR [#29](https://github.com/beemployee/ios/pull/29), [#30](https://github.com/beemployee/ios/pull/30)).
 </przykład>
 """.strip()
 
