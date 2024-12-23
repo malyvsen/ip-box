@@ -1,3 +1,4 @@
+import pickle
 from datetime import date
 from pathlib import Path
 
@@ -8,9 +9,38 @@ from .github_client import github_client
 from .projects import generate_dataframe
 from .pull_request import MergedPullRequest, PullRequest
 
+default_prs_file = Path("prs.pickle")
 
-@click.command()
+
+@click.group()
+def cli():
+    pass
+
+
+@cli.command()
 @click.argument("repo", required=True)
+@click.argument(
+    "output",
+    type=click.Path(exists=False, dir_okay=False, path_type=Path),
+    default=default_prs_file,
+)
+async def list_prs(repo: str, output: Path):
+    repo_object = github_client.get_repo(repo)
+    all_prs = await PullRequest.from_repository(repo_object)
+    pickle.dump(all_prs, output.open("wb"))
+
+
+@cli.command()
+@click.argument(
+    "input",
+    type=click.Path(exists=True, dir_okay=False, path_type=Path),
+    default=default_prs_file,
+)
+@click.argument(
+    "output",
+    type=click.Path(exists=False, dir_okay=False, path_type=Path),
+    default=Path("ip_box.csv"),
+)
 @click.option(
     "--author",
     help="GitHub username of the author of the pull requests",
@@ -22,15 +52,10 @@ from .pull_request import MergedPullRequest, PullRequest
     help="Only include PRs merged in this year",
     default=date.today().year,
 )
-@click.option(
-    "--output",
-    type=click.Path(exists=False, dir_okay=False, path_type=Path),
-    help="Output file name",
-    default="ip_box.csv",
-)
-async def main(repo: str, author: str, year: int, output: Path):
-    repo_object = github_client.get_repo(repo)
-    all_prs = await PullRequest.from_repository(repo_object)
+async def generate(input: Path, output: Path, author: str, year: int):
+    with input.open("rb") as file:
+        all_prs = pickle.load(file)
+
     fitting_prs = [
         pr
         for pr in all_prs
@@ -44,4 +69,4 @@ async def main(repo: str, author: str, year: int, output: Path):
     print(f"Write {len(dataframe)} rows to {output.as_posix()}")
 
 
-main()
+cli()
