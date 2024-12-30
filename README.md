@@ -19,3 +19,7 @@ The run:
 pdm dev list-prs org/repo  # lists all PRs in the repository, writes to prs.pickle
 pdm dev generate --author your-github-username --year 2024  # generates the documentation, writes to ip_box.csv
 ```
+
+## Development
+
+Use `pdm check` to ensure code quality.
