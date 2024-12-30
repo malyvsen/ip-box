@@ -20,7 +20,7 @@ typecheck = "pyright ."
 deptry = "deptry ."
 check = { composite = ["lint", "typecheck", "deptry"] }
 
-dev = { cmd = "python -m ip_box", env_file = ".env" }
+ip-box = { cmd = "python -m ip_box", env_file = ".env" }
 
 [dependency-groups]
 dev = [

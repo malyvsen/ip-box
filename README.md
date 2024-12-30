@@ -16,9 +16,11 @@ Populate the `.env` file with the following variables:
 The run:
 
 ```bash
-pdm dev list-prs org/repo  # lists all PRs in the repository, writes to prs.pickle
-pdm dev generate --author your-github-username --year 2024  # generates the documentation, writes to ip_box.csv
+pdm ip-box list-prs org/repo  # lists all PRs in the repository, writes to prs.pickle
+pdm ip-box generate  # generates the documentation, writes to ip_box.csv
 ```
+
+You can optionally pass `--author` and `--year` to `generate` - they have sensible defaults, though.
 
 ## Warranty
 
