@@ -20,6 +20,12 @@ pdm dev list-prs org/repo  # lists all PRs in the repository, writes to prs.pick
 pdm dev generate --author your-github-username --year 2024  # generates the documentation, writes to ip_box.csv
 ```
 
+## Warranty
+
+It's AI generated output, and I'm not a lawyer. Use at your own risk, I cannot give any warranty.
+
+That said, I _did_ base this on my conversations with a lawyer, a tax advisor, and an accountant.
+
 ## Development
 
 Use `pdm check` to ensure code quality.
