@@ -19,13 +19,19 @@ async def generate_dataframe(
         *[write_description(grouped[month]) for month in present_months],
         desc="Generating descriptions",
     )
+    nans = [float("nan") for _ in range(len(present_months))]
+    empty = ["" for _ in range(len(present_months))]
     return pd.DataFrame(
         {
-            "Numer KPWI": list(range(1, len(present_months) + 1)),
+            "Liczba porządkowa": list(range(1, len(present_months) + 1)),
             "Rok": [month.year for month in present_months],
             "Miesiąc": [month.polish_name.title() for month in present_months],
             "Data rozpoczęcia": [month.first_day for month in present_months],
             "Data zakończenia": [month.last_day for month in present_months],
-            "Opis": descriptions,
+            "Opis prac": descriptions,
+            "Czas prac (w godzinach)": nans,
+            "Przychód z prac B+R (w PLN)": nans,
+            "Opis kosztów związanych z pracami B+R": empty,
+            "Suma kosztów (w PLN)": nans,
         }
     )
